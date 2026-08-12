@@ -1,0 +1,133 @@
+{% liquid
+  assign selected_image = block.settings.image
+  assign image_alt = block.settings.image_alt | default: block.settings.text
+  assign effective_api_endpoint = block.settings.api_endpoint | default: 'https://macfox.decomkt.com'
+%}
+
+{% if block.settings.enabled %}
+  <div
+    class="student-discount-app student-discount-app--{{ block.settings.alignment }}"
+    data-student-discount-app
+    data-endpoint="{{ effective_api_endpoint | escape }}"
+    data-shop="{{ shop.permanent_domain | escape }}"
+    {{ block.shopify_attributes }}
+  >
+    <button
+      type="button"
+      class="student-discount-app__trigger student-discount-app__trigger--{{ block.settings.content_type }}"
+      data-student-discount-trigger
+      aria-haspopup="dialog"
+      style="--sd-background: {{ block.settings.background_color }}; --sd-text: {{ block.settings.text_color }}; --sd-radius: {{ block.settings.corner_radius }}px; --sd-max-width: {{ block.settings.max_width }}px;"
+    >
+      {% if block.settings.content_type == 'image' and selected_image != blank %}
+        {{
+          selected_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'student-discount-app__image',
+            loading: 'lazy',
+            widths: '320, 480, 640, 960, 1280, 1600',
+            sizes: '(max-width: 749px) calc(100vw - 32px), 720px',
+            alt: image_alt
+        }}
+      {% else %}
+        <span class="student-discount-app__text">{{ block.settings.text | escape }}</span>
+      {% endif %}
+    </button>
+
+    {% render 'student-discount-modal', api_endpoint: effective_api_endpoint, shop_domain: shop.permanent_domain, block_id: block.id %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Student discount",
+  "target": "section",
+  "stylesheet": "student-discount.css",
+  "javascript": "student-discount.js",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Show this module",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_type",
+      "label": "Content type",
+      "options": [
+        { "value": "text", "label": "Text" },
+        { "value": "image", "label": "Image" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Verify your student status and get a student discount"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Verify your student status"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 240,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 720
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Text background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
+      "type": "url",
+      "id": "api_endpoint",
+      "label": "Student discount API URL",
+      "info": "Leave blank to use https://macfox.decomkt.com"
+    }
+  ]
+}
+{% endschema %}

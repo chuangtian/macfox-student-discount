@@ -1,0 +1,379 @@
+.student-discount-app,
+.student-discount-app * {
+  box-sizing: border-box;
+}
+
+.student-discount-app--left { text-align: left; }
+.student-discount-app--center { text-align: center; }
+.student-discount-app--right { text-align: right; }
+
+.student-discount-app__trigger {
+  display: inline-flex;
+  width: min(100%, var(--sd-max-width));
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sd-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.student-discount-app__trigger:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+.student-discount-app__trigger--text {
+  padding: 14px 24px;
+  background: var(--sd-background);
+  color: var(--sd-text);
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.student-discount-app__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.student-discount-dialog[hidden],
+.student-discount-dialog [hidden] {
+  display: none !important;
+}
+
+.student-discount-dialog {
+  position: fixed;
+  z-index: 2147483500;
+  inset: 0;
+  color: #111;
+  font-family: inherit;
+  text-align: left;
+}
+
+.student-discount-dialog,
+.student-discount-dialog * {
+  box-sizing: border-box;
+}
+
+.student-discount-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(0, 0, 0, .64);
+  cursor: default;
+}
+
+.student-discount-dialog__panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: clamp(28px, 4vw, 48px);
+  transform: translate(-50%, -50%);
+  background: #fff;
+  box-shadow: 0 24px 72px rgba(0, 0, 0, .34);
+  overscroll-behavior: contain;
+}
+
+.student-discount-dialog__close {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  margin: -18px -18px 4px auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111;
+  font: 400 38px/1 Arial, sans-serif;
+  cursor: pointer;
+}
+
+.student-discount-dialog h2,
+.student-discount-dialog h3 {
+  color: #111;
+  text-align: center;
+}
+
+.student-discount-dialog h2 {
+  margin: 0 auto 18px;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.12;
+}
+
+.student-discount-dialog h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.student-discount-dialog__lead,
+.student-discount-dialog__id-section > p {
+  margin: 0 auto 24px;
+  color: #444;
+  font-size: 17px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.student-discount-dialog__email-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+}
+
+.student-discount-dialog input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 16px;
+  border: 1px solid #aaa;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-size: 16px;
+}
+
+.student-discount-dialog input:focus {
+  border-color: #111;
+  outline: 2px solid #111;
+  outline-offset: 1px;
+}
+
+.student-discount-dialog input.is-invalid {
+  border-color: #d92d20;
+  background: #fff8f7;
+  outline-color: #d92d20;
+}
+
+.student-discount-dialog button[type="submit"],
+.student-discount-dialog__primary {
+  min-height: 56px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 0;
+  background: #222;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.student-discount-dialog button[disabled] {
+  cursor: not-allowed;
+  opacity: .42;
+}
+
+.student-discount-dialog__error {
+  margin: 12px auto 0;
+  color: #c32b1c;
+  font-size: 14px;
+  text-align: center;
+}
+
+.student-discount-dialog__alternative {
+  margin: 18px auto 0;
+  text-align: center;
+}
+
+.student-discount-dialog__alternative strong {
+  display: block;
+  color: #c32b1c;
+  font-size: 18px;
+}
+
+.student-discount-dialog__alternative p {
+  margin: 8px 0 16px;
+}
+
+.student-discount-dialog__id-section {
+  margin: 26px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid #ddd;
+}
+
+.student-discount-dialog__id-section > p {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.student-discount-dialog__id-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.student-discount-dialog__id-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.student-discount-dialog__file,
+.student-discount-dialog__consent,
+.student-discount-dialog__id-form .student-discount-dialog__error,
+.student-discount-dialog__id-form button {
+  grid-column: 1 / -1;
+}
+
+.student-discount-dialog__upload {
+  position: relative;
+  display: grid;
+  min-height: 190px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px dashed #999;
+  cursor: pointer;
+}
+
+.student-discount-dialog__upload input[type="file"] {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.student-discount-dialog__upload-placeholder {
+  display: grid;
+  max-width: 400px;
+  place-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.student-discount-dialog__upload-placeholder svg {
+  width: 38px;
+  height: 38px;
+}
+
+.student-discount-dialog__upload img {
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  padding: 10px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.student-discount-dialog__file-name {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  overflow: hidden;
+  padding: 7px 10px;
+  background: rgba(0, 0, 0, .72);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.student-discount-dialog__consent {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.student-discount-dialog__consent input {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  padding: 0;
+  accent-color: #222;
+}
+
+.student-discount-dialog small {
+  color: #666;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.student-discount-dialog__honeypot {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  overflow: hidden !important;
+}
+
+.student-discount-dialog__success-icon {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: #1f8f55;
+  color: #fff;
+  font-size: 34px;
+}
+
+@media (max-width: 640px) {
+  .student-discount-app__trigger {
+    width: 100%;
+  }
+
+  .student-discount-dialog__panel {
+    top: 8px;
+    left: 8px;
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+    padding: 20px 16px max(24px, env(safe-area-inset-bottom));
+    transform: none;
+  }
+
+  .student-discount-dialog__close {
+    margin: -8px -6px 2px auto;
+  }
+
+  .student-discount-dialog h2 {
+    margin-bottom: 14px;
+    font-size: clamp(27px, 9vw, 34px);
+  }
+
+  .student-discount-dialog__lead {
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  .student-discount-dialog__email-row,
+  .student-discount-dialog__id-form {
+    grid-template-columns: 1fr;
+  }
+
+  .student-discount-dialog button[type="submit"],
+  .student-discount-dialog__primary {
+    width: 100%;
+    min-height: 54px;
+  }
+
+  .student-discount-dialog__upload {
+    min-height: 164px;
+  }
+}
