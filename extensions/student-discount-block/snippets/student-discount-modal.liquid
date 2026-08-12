@@ -18,8 +18,31 @@ Renders the student discount verification dialog for an app block.
   <div class="student-discount-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="student-discount-title-{{ block_id }}">
     <button type="button" class="student-discount-dialog__close" data-sd-close aria-label="Close">×</button>
 
-    <div data-sd-view="email">
-      <h2 id="student-discount-title-{{ block_id }}">Get Student Discount</h2>
+    <div data-sd-view="method">
+      <button type="button" class="student-discount-dialog__back" data-sd-close>
+        <span aria-hidden="true">←</span>
+        <span>Back</span>
+      </button>
+      <h2 id="student-discount-title-{{ block_id }}">Preferred Verification Method</h2>
+      <p class="student-discount-dialog__lead">Verify quickly and securely by selecting your preferred method.</p>
+      <div class="student-discount-dialog__methods">
+        <div class="student-discount-dialog__method">
+          <button type="button" class="student-discount-dialog__primary" data-sd-select-email>Get Code by Email</button>
+          <p>Sends your student discount to your university email address.</p>
+        </div>
+        <div class="student-discount-dialog__method">
+          <button type="button" class="student-discount-dialog__primary" data-sd-select-id>Verify with Student ID</button>
+          <p>Upload your student ID to get verified and receive your discount by email.</p>
+        </div>
+      </div>
+    </div>
+
+    <div data-sd-view="email" hidden>
+      <button type="button" class="student-discount-dialog__back" data-sd-back-method>
+        <span aria-hidden="true">←</span>
+        <span>Back</span>
+      </button>
+      <h2>Get Student Discount</h2>
       <p class="student-discount-dialog__lead">Enter the email address provided by your educational institution.</p>
       <form data-sd-email-form novalidate>
         <div class="student-discount-dialog__email-row">
@@ -35,8 +58,15 @@ Renders the student discount verification dialog for an app block.
         <button type="button" class="student-discount-dialog__primary" data-sd-open-id>Fill in information</button>
       </div>
 
-      <section class="student-discount-dialog__id-section" data-sd-id-section hidden>
-        <h3>Verify with Student ID</h3>
+    </div>
+
+    <div data-sd-view="student-id" hidden>
+      <button type="button" class="student-discount-dialog__back" data-sd-back-method>
+        <span aria-hidden="true">←</span>
+        <span>Back</span>
+      </button>
+      <section class="student-discount-dialog__id-section" data-sd-id-section>
+        <h2>Verify with Student ID</h2>
         <p>A reviewer will email your discount code after approval.</p>
         <form class="student-discount-dialog__id-form" data-sd-id-form>
           <label><span>Full name</span><input type="text" name="fullName" autocomplete="name" minlength="2" maxlength="120" required></label>
@@ -56,7 +86,7 @@ Renders the student discount verification dialog for an app block.
           </label>
           <label class="student-discount-dialog__consent">
             <input type="checkbox" name="privacyConsent" value="agreed" required>
-            <span>I agree to the Privacy Policy and Terms of Service. I understand my information will only be used to verify my student status and deliver the student discount.</span>
+            <span>I agree to the Privacy Policy and Terms of Service. I understand my image may be analyzed automatically to determine whether it appears to be a student ID, and my information will only be used to review my application and deliver the student discount.</span>
           </label>
           <label class="student-discount-dialog__honeypot" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
           <p class="student-discount-dialog__error" data-sd-id-error hidden></p>

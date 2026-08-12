@@ -22,6 +22,42 @@ shopify app init --template=https://github.com/Shopify/shopify-app-template-exte
 shopify app dev
 ```
 
+#### Macfox test store
+
+Install dependencies once:
+
+```shell
+npm ci
+```
+
+Start a development preview on `my-store-custom-app-dev-2026-08-05.myshopify.com`:
+
+```shell
+npm run dev:test-store
+```
+
+Keep this command running while editing files under `extensions/`. Shopify CLI
+rebuilds the extensions and updates the development preview automatically. Open
+the `macfox-student-discount` app in that development store and refresh it to
+test the latest local code. This command explicitly uses `shopify.app.toml` so
+it cannot accidentally select the other same-named app configuration in this
+repository. The local storefront password is read from the Git-ignored
+`.env.local` file and the preview is attached to the `test-data` theme by its
+stable theme ID.
+
+Before committing, run:
+
+```shell
+npm run check
+```
+
+Stop the preview with `Ctrl+C`. To remove the development preview from the test
+store, run:
+
+```shell
+npm run dev:test-store:clean
+```
+
 Press P to open the URL to your app. Once you click install, you can start development.
 
 Local development is powered by [Shopify CLI](https://shopify.dev/docs/apps/build/cli-for-apps/test-apps-locally). It logs into your account, connects to an app, provides environment variables, updates remote config, creates a tunnel and provides commands to generate extensions.

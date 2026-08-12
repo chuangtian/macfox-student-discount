@@ -2,6 +2,18 @@ import {render} from 'preact';
 import {useCallback, useEffect, useState} from 'preact/hooks';
 
 const API_BASE = 'https://macfox.decomkt.com/api/shopify-app/student-discounts';
+const DEFAULT_DISCOUNT_SETTINGS = {
+  codePrefix: 'STUDENT',
+  discountType: 'PERCENTAGE',
+  discountValue: 10,
+  discountTarget: 'ALL_PRODUCTS',
+  discountProductIds: [],
+  discountCollectionIds: [],
+  usageLimit: 1,
+  combinesWithProduct: false,
+  combinesWithOrder: false,
+  combinesWithShipping: false,
+};
 
 export default async () => {
   render(<App />, document.body);
@@ -9,7 +21,9 @@ export default async () => {
 
 function App() {
   const [claims, setClaims] = useState([]);
+  const [campaign, setCampaign] = useState(DEFAULT_DISCOUNT_SETTINGS);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [reviewingId, setReviewingId] = useState('');
   const [selectedClaim, setSelectedClaim] = useState(null);
@@ -64,6 +78,7 @@ function App() {
       const json = await response.json();
       if (!response.ok) throw new Error(json.error || '申请记录加载失败');
       setClaims(json.claims || []);
+      setCampaign({...DEFAULT_DISCOUNT_SETTINGS, ...(json.campaign || {})});
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : '申请记录加载失败');
     } finally {
@@ -100,11 +115,164 @@ function App() {
     }
   }, [apiFetch, load]);
 
+  const updateCampaign = useCallback((key, value) => {
+    setCampaign((current) => ({...current, [key]: value}));
+  }, []);
+
+  const selectDiscountResources = useCallback(async () => {
+    const isProduct = campaign.discountTarget === 'PRODUCTS';
+    const ids = isProduct ? campaign.discountProductIds : campaign.discountCollectionIds;
+    try {
+      const selected = await shopify.resourcePicker({
+        type: isProduct ? 'product' : 'collection',
+        action: 'select',
+        multiple: 100,
+        selectionIds: (ids || []).map((id) => ({id})),
+        ...(isProduct ? {filter: {variants: false}} : {}),
+      });
+      if (!selected) return;
+      updateCampaign(
+        isProduct ? 'discountProductIds' : 'discountCollectionIds',
+        selected.map((resource) => resource.id),
+      );
+    } catch (pickerError) {
+      shopify.toast.show(
+        pickerError instanceof Error ? pickerError.message : '资源选择器打开失败',
+        {isError: true},
+      );
+    }
+  }, [campaign, updateCampaign]);
+
+  const saveDiscountSettings = useCallback(async () => {
+    setSaving(true);
+    try {
+      const response = await apiFetch('', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          codePrefix: campaign.codePrefix,
+          discountType: campaign.discountType,
+          discountValue: Number(campaign.discountValue),
+          discountTarget: campaign.discountTarget,
+          discountProductIds: campaign.discountProductIds,
+          discountCollectionIds: campaign.discountCollectionIds,
+          usageLimit: Number(campaign.usageLimit),
+          combinesWithProduct: campaign.combinesWithProduct,
+          combinesWithOrder: campaign.combinesWithOrder,
+          combinesWithShipping: campaign.combinesWithShipping,
+        }),
+      });
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.error || '折扣设置保存失败');
+      setCampaign({...DEFAULT_DISCOUNT_SETTINGS, ...json.campaign});
+      shopify.toast.show('折扣设置已保存');
+    } catch (saveError) {
+      shopify.toast.show(
+        saveError instanceof Error ? saveError.message : '折扣设置保存失败',
+        {isError: true},
+      );
+    } finally {
+      setSaving(false);
+    }
+  }, [apiFetch, campaign]);
+
   return (
     <s-page heading="学生优惠">
       <s-button slot="primary-action" onClick={() => void load()} disabled={loading}>
         刷新
       </s-button>
+
+      <s-section heading="折扣设置">
+        <s-stack direction="block" gap="base">
+          <s-text>这些设置会应用到此后发放的学生折扣码。</s-text>
+
+          <s-text-field
+            label="折扣码前缀"
+            details="只使用英文字母和数字，最长 12 个字符。"
+            value={campaign.codePrefix}
+            onInput={(event) => updateCampaign('codePrefix', event.currentTarget.value)}
+          />
+
+          <s-grid gridTemplateColumns="repeat(2, minmax(0, 1fr))" gap="base">
+            <s-select
+              label="折扣类型"
+              value={campaign.discountType}
+              onChange={(event) => updateCampaign('discountType', event.currentTarget.value)}
+            >
+              <s-option value="PERCENTAGE">百分比折扣</s-option>
+              <s-option value="FIXED_AMOUNT">固定金额折扣</s-option>
+            </s-select>
+            <s-number-field
+              label={campaign.discountType === 'PERCENTAGE' ? '折扣百分比' : '折扣金额'}
+              value={String(campaign.discountValue)}
+              min="0.01"
+              max={campaign.discountType === 'PERCENTAGE' ? 100 : undefined}
+              step="0.01"
+              suffix={campaign.discountType === 'PERCENTAGE' ? '%' : undefined}
+              onInput={(event) => updateCampaign('discountValue', event.currentTarget.value)}
+            />
+          </s-grid>
+
+          <s-select
+            label="折扣适用范围"
+            value={campaign.discountTarget}
+            onChange={(event) => updateCampaign('discountTarget', event.currentTarget.value)}
+          >
+            <s-option value="ALL_PRODUCTS">全部产品</s-option>
+            <s-option value="PRODUCTS">指定产品</s-option>
+            <s-option value="COLLECTIONS">指定产品系列</s-option>
+          </s-select>
+
+          {campaign.discountTarget !== 'ALL_PRODUCTS' && (
+            <s-stack direction="inline" gap="base" alignItems="center">
+              <s-button onClick={() => void selectDiscountResources()}>
+                {campaign.discountTarget === 'PRODUCTS' ? '选择产品' : '选择产品系列'}
+              </s-button>
+              <s-text color="subdued">
+                已选择 {campaign.discountTarget === 'PRODUCTS'
+                  ? campaign.discountProductIds.length
+                  : campaign.discountCollectionIds.length} 项
+              </s-text>
+            </s-stack>
+          )}
+
+          <s-number-field
+            label="折扣使用次数"
+            details="每个发放的折扣码最多可在 Shopify 中成功核销的总次数。"
+            value={String(campaign.usageLimit)}
+            min="1"
+            max="1000000"
+            step="1"
+            inputMode="numeric"
+            onInput={(event) => updateCampaign('usageLimit', event.currentTarget.value)}
+          />
+
+          <s-stack direction="block" gap="small">
+            <s-text type="strong">与其他折扣叠加</s-text>
+            <s-checkbox
+              label="允许与商品折扣叠加"
+              checked={campaign.combinesWithProduct}
+              onChange={(event) => updateCampaign('combinesWithProduct', event.currentTarget.checked)}
+            />
+            <s-checkbox
+              label="允许与订单折扣叠加"
+              checked={campaign.combinesWithOrder}
+              onChange={(event) => updateCampaign('combinesWithOrder', event.currentTarget.checked)}
+            />
+            <s-checkbox
+              label="允许与运费折扣叠加"
+              checked={campaign.combinesWithShipping}
+              onChange={(event) => updateCampaign('combinesWithShipping', event.currentTarget.checked)}
+            />
+          </s-stack>
+
+          <s-stack direction="inline" justifyContent="end">
+            <s-button variant="primary" loading={saving} onClick={() => void saveDiscountSettings()}>
+              保存折扣设置
+            </s-button>
+          </s-stack>
+        </s-stack>
+      </s-section>
 
       <s-section heading="申请与审核">
         <s-stack direction="block" gap="base">
@@ -151,7 +319,14 @@ function App() {
                       ) : '—'}
                     </s-table-cell>
                     <s-table-cell>{claim.status === 'ISSUED' ? claim.code : '—'}</s-table-cell>
-                    <s-table-cell><StatusBadge status={claim.status} /></s-table-cell>
+                    <s-table-cell>
+                      <s-stack direction="block" gap="small-200">
+                        <StatusBadge status={claim.status} />
+                        {claim.status === 'PENDING' && claim.error && (
+                          <s-text color="subdued">{claim.error}</s-text>
+                        )}
+                      </s-stack>
+                    </s-table-cell>
                     <s-table-cell>{new Date(claim.createdAt).toLocaleString('zh-CN')}</s-table-cell>
                     <s-table-cell>
                       {claim.status === 'PENDING' && claim.verificationMethod === 'STUDENT_ID' ? (
@@ -201,7 +376,7 @@ function App() {
 
 function StatusBadge({status}) {
   const config = {
-    PENDING: ['待审核', 'info'],
+    PENDING: ['待人工审核', 'info'],
     ISSUED: ['已发放', 'success'],
     FAILED: ['失败', 'critical'],
     REJECTED: ['已拒绝', 'critical'],

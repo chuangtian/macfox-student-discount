@@ -9,6 +9,9 @@
     "shopify": "shopify",
     "build": "shopify app build",
     "dev": "shopify app dev",
+    "dev:test-store": "sh scripts/dev-test-store.sh",
+    "dev:test-store:clean": "shopify app dev clean --config shopify.app.toml --store my-store-custom-app-dev-2026-08-05.myshopify.com",
+    "check": "shopify app config validate --config shopify.app.toml --json && shopify app build",
     "info": "shopify app info",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy"
