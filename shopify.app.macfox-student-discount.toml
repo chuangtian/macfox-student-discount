@@ -1,22 +1,20 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "16918021f94393e254f69d4954826391"
-name = "macfox-student-discount"
+client_id = "5b3f8fc49153ed1bae18f9f4588f972a"
 application_url = "https://macfox.decomkt.com/shopify-app/student-discounts"
 embedded = true
-
-[build]
-automatically_update_urls_on_dev = true
+name = "macfox-student-discount"
 
 [webhooks]
 api_version = "2026-10"
 
-[access.admin]
-direct_api_mode = "online"
-embedded_app_direct_api_access = true
-
 [access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_discounts,write_discounts"
 
 [auth]
 redirect_urls = [ "https://macfox.decomkt.com/api/shopify-app/auth/callback" ]
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
