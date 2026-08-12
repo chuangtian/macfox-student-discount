@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "16918021f94393e254f69d4954826391"
-name = "macfox-student-discount"
+name = "student-discount"
 application_url = "https://macfox.decomkt.com/shopify-app/student-discounts"
 embedded = true
 
