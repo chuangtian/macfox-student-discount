@@ -117,7 +117,11 @@ function App() {
       });
       const json = await response.json();
       if (!response.ok) throw new Error(json.error || '审核操作失败');
-      shopify.toast.show(action === 'APPROVE' ? '审核通过，优惠码已发送' : '申请已拒绝');
+      shopify.toast.show(action === 'APPROVE'
+        ? json.emailSent === false
+          ? '审核通过，优惠码已创建，但邮件发送失败'
+          : '审核通过，优惠码已发送'
+        : '申请已拒绝');
       await load();
     } catch (reviewError) {
       shopify.toast.show(
