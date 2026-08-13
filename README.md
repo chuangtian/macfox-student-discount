@@ -30,7 +30,7 @@ Install dependencies once:
 npm ci
 ```
 
-Start a development preview on `my-store-custom-app-dev-2026-08-05.myshopify.com`:
+Start a development preview on `macfox-test-app.myshopify.com`:
 
 ```shell
 npm run dev:test-store
@@ -39,11 +39,10 @@ npm run dev:test-store
 Keep this command running while editing files under `extensions/`. Shopify CLI
 rebuilds the extensions and updates the development preview automatically. Open
 the `macfox-student-discount` app in that development store and refresh it to
-test the latest local code. This command explicitly uses `shopify.app.toml` so
-it cannot accidentally select the other same-named app configuration in this
-repository. The local storefront password is read from the Git-ignored
-`.env.local` file and the preview is attached to the `test-data` theme by its
-stable theme ID.
+test the latest local code. The default `shopify.app.toml` is pinned to the
+E-LINK TECHNOLOGY CO LTD app (client ID `5b3f8fc49153ed1bae18f9f4588f972a`)
+so normal build, preview, and deploy commands target the correct app. The local
+preview uses the collaborator-authorized `macfox-test-app` store.
 
 Before committing, run:
 
