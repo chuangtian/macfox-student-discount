@@ -17,6 +17,7 @@ embedded_app_direct_api_access = true
 
 [access_scopes]
 scopes = "read_discounts,write_discounts,read_products"
+use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [ "https://macfox.decomkt.com/api/shopify-app/auth/callback" ]
