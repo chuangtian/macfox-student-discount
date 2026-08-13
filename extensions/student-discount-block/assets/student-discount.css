@@ -100,6 +100,18 @@
   cursor: pointer;
 }
 
+.student-discount-dialog__brand {
+  display: flex;
+  justify-content: center;
+  margin: -8px auto 26px;
+}
+
+.student-discount-dialog__brand img {
+  display: block;
+  width: min(190px, 52vw);
+  height: auto;
+}
+
 .student-discount-dialog__back {
   display: inline-flex;
   align-items: center;
@@ -486,6 +498,10 @@
 
   .student-discount-dialog__close {
     margin: -8px -6px 2px auto;
+  }
+
+  .student-discount-dialog__brand {
+    margin: -4px auto 20px;
   }
 
   .student-discount-dialog h2 {

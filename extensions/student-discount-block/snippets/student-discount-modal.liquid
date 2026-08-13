@@ -18,6 +18,10 @@ Renders the student discount verification dialog for an app block.
   <div class="student-discount-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="student-discount-title-{{ block_id }}">
     <button type="button" class="student-discount-dialog__close" data-sd-close aria-label="Close">×</button>
 
+    <div class="student-discount-dialog__brand" aria-label="Macfox">
+      <img src="{{ 'macfox-logo.svg' | asset_url }}" alt="Macfox" width="280" height="50">
+    </div>
+
     <div data-sd-view="method">
       <button type="button" class="student-discount-dialog__back" data-sd-close>
         <span aria-hidden="true">←</span>
