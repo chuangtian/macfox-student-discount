@@ -2,6 +2,7 @@
   "admin.app.home.render": {
     "assets": [
       "graphql-logo.png",
+      "macfox-logo-black.svg",
       "polaris-icon.png",
       "preact-logo.png"
     ]

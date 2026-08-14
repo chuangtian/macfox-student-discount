@@ -93,10 +93,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(720px, calc(100vw - 32px));
+  width: min(640px, calc(100vw - 32px));
   max-height: calc(100dvh - 40px);
   overflow-y: auto;
-  padding: clamp(28px, 4vw, 48px);
+  padding: clamp(24px, 3.2vw, 36px);
   transform: translate(-50%, -50%);
   background: #fff;
   box-shadow: 0 24px 72px rgba(0, 0, 0, .34);
@@ -105,27 +105,27 @@
 
 .student-discount-dialog__close {
   display: grid;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   place-items: center;
   margin: -18px -18px 4px auto;
   padding: 0;
   border: 0;
   background: transparent;
   color: #111;
-  font: 400 38px/1 Arial, sans-serif;
+  font: 400 32px/1 Arial, sans-serif;
   cursor: pointer;
 }
 
 .student-discount-dialog__brand {
   display: flex;
   justify-content: center;
-  margin: -8px auto 26px;
+  margin: -5px auto 20px;
 }
 
 .student-discount-dialog__brand img {
   display: block;
-  width: min(190px, 52vw);
+  width: min(165px, 48vw);
   height: auto;
 }
 
@@ -157,20 +157,20 @@
 
 .student-discount-dialog h2 {
   margin: 0 auto 18px;
-  font-size: clamp(30px, 4vw, 42px);
+  font-size: clamp(26px, 3.4vw, 34px);
   line-height: 1.12;
 }
 
 .student-discount-dialog h3 {
   margin: 0;
-  font-size: 26px;
+  font-size: 22px;
 }
 
 .student-discount-dialog__lead,
 .student-discount-dialog__id-section > p {
   margin: 0 auto 24px;
   color: #444;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.5;
   text-align: center;
 }
@@ -183,14 +183,14 @@
 
 .student-discount-dialog input {
   width: 100%;
-  min-height: 56px;
+  min-height: 50px;
   padding: 0 16px;
   border: 1px solid #aaa;
   border-radius: 0;
   background: #fff;
   color: #111;
   font: inherit;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .student-discount-dialog input:focus {
@@ -207,14 +207,14 @@
 
 .student-discount-dialog button[type="submit"],
 .student-discount-dialog__primary {
-  min-height: 56px;
-  padding: 0 26px;
+  min-height: 50px;
+  padding: 0 22px;
   border: 0;
   border-radius: 0;
   background: #222;
   color: #fff;
   font: inherit;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
 }
 
@@ -297,7 +297,7 @@
 .student-discount-dialog__upload {
   position: relative;
   display: grid;
-  min-height: 190px;
+  min-height: 160px;
   place-items: center;
   overflow: hidden;
   border: 1px dashed #999;
@@ -333,7 +333,7 @@
 .student-discount-dialog__upload img {
   display: block;
   width: 100%;
-  max-height: 240px;
+  max-height: 205px;
   padding: 10px;
   object-fit: contain;
   pointer-events: none;
@@ -353,6 +353,31 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   pointer-events: none;
+}
+
+.student-discount-dialog__clear-file {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .65);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .76);
+  color: #fff;
+  font: 400 24px/1 Arial, sans-serif;
+  cursor: pointer;
+}
+
+.student-discount-dialog__clear-file:hover,
+.student-discount-dialog__clear-file:focus-visible {
+  background: #111;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .student-discount-dialog__consent {
@@ -391,14 +416,14 @@
 
 .student-discount-dialog__success-icon {
   display: grid;
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   place-items: center;
-  margin: 0 auto 24px;
+  margin: 0 auto 18px;
   border-radius: 50%;
   background: #1f8f55;
   color: #fff;
-  font-size: 34px;
+  font-size: 27px;
 }
 
 .student-discount-dialog__code-result {
@@ -416,12 +441,12 @@
 
 .student-discount-dialog__delivery {
   max-width: 560px;
-  margin: 0 auto 24px;
-  padding: 12px 16px;
+  margin: 12px auto 18px;
+  padding: 10px 14px;
   border: 1px solid #b7dfc8;
   background: #f0faf4;
   color: #175c3d;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -438,7 +463,7 @@
   align-items: center;
   max-width: 560px;
   margin: 0 auto;
-  padding: 22px;
+  padding: 18px;
   border: 2px solid #222;
   background: #f7f7f5;
   text-align: left;
@@ -457,7 +482,7 @@
   overflow-wrap: anywhere;
   color: #111;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: clamp(21px, 4vw, 30px);
+  font-size: clamp(20px, 3.4vw, 26px);
   letter-spacing: .04em;
   line-height: 1.2;
 }
@@ -482,7 +507,7 @@
 
 .student-discount-dialog__copy-feedback {
   min-height: 21px;
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: #1f6f49;
   font-size: 13px;
   font-weight: 700;
@@ -509,7 +534,7 @@
     left: 8px;
     width: calc(100vw - 16px);
     max-height: calc(100dvh - 16px);
-    padding: 20px 16px max(24px, env(safe-area-inset-bottom));
+    padding: 18px 15px max(20px, env(safe-area-inset-bottom));
     transform: none;
   }
 
@@ -523,7 +548,7 @@
 
   .student-discount-dialog h2 {
     margin-bottom: 14px;
-    font-size: clamp(27px, 9vw, 34px);
+    font-size: clamp(25px, 8vw, 30px);
   }
 
   .student-discount-dialog__lead {
@@ -540,11 +565,11 @@
   .student-discount-dialog button[type="submit"],
   .student-discount-dialog__primary {
     width: 100%;
-    min-height: 54px;
+    min-height: 50px;
   }
 
   .student-discount-dialog__upload {
-    min-height: 164px;
+    min-height: 150px;
   }
 
   .student-discount-dialog__code-card {

@@ -1,5 +1,5 @@
 import {render} from 'preact';
-import {useCallback, useEffect, useState} from 'preact/hooks';
+import {useCallback, useEffect, useRef, useState} from 'preact/hooks';
 import {LocationProvider, useLocation} from 'preact-iso';
 
 const API_BASE = 'https://macfox.decomkt.com/api/shopify-app/student-discounts';
@@ -38,6 +38,7 @@ function App() {
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [evidenceSrc, setEvidenceSrc] = useState('');
   const [evidenceLoading, setEvidenceLoading] = useState(false);
+  const clearTestDataModalRef = useRef(null);
   const [expandedSettings, setExpandedSettings] = useState({
     prefix: true,
     type: true,
@@ -115,7 +116,7 @@ function App() {
       if (!response.ok && response.status !== 207) {
         throw new Error(json.error || '测试数据清理失败');
       }
-      document.getElementById('clear-test-data-modal')?.hideOverlay?.();
+      clearTestDataModalRef.current?.hideOverlay();
       await load();
       if (json.failedClaims) {
         shopify.toast.show(
@@ -158,7 +159,9 @@ function App() {
         ? json.emailSent === false
           ? '审核通过，优惠码已创建，但邮件发送失败'
           : '审核通过，优惠码已发送'
-        : '申请已拒绝');
+        : json.emailSent === false
+          ? '申请已拒绝，但拒绝通知邮件发送失败'
+          : '申请已拒绝，通知邮件已发送');
       await load();
     } catch (reviewError) {
       shopify.toast.show(
@@ -249,6 +252,10 @@ function App() {
         <s-link href="/discount-settings">折扣设置</s-link>
         <s-link href="/theme-module">店铺模块</s-link>
       </s-app-nav>
+
+      <s-box padding="base" maxInlineSize="180px">
+        <s-image src="./macfox-logo-black.svg" alt="Macfox" />
+      </s-box>
 
       {view === 'discount-settings' && (
         <s-page heading="折扣设置">
@@ -520,7 +527,7 @@ function App() {
         <s-button slot="secondary-actions" commandFor="student-id-modal" command="--hide">关闭</s-button>
       </s-modal>
 
-      <s-modal id="clear-test-data-modal" heading="确认清空全部测试数据">
+      <s-modal ref={clearTestDataModalRef} id="clear-test-data-modal" heading="确认清空全部测试数据">
         <s-stack direction="block" gap="base">
           <s-banner tone="critical">此操作无法撤销。</s-banner>
           <s-text>将永久删除当前测试店铺的全部 {claims.length} 条申请记录、学生证文件，以及申请生成的 Shopify 折扣码。</s-text>
