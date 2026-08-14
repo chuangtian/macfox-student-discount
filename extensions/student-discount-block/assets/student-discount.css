@@ -28,6 +28,14 @@
   outline-offset: 3px;
 }
 
+.student-discount-app__trigger:hover,
+.student-discount-app__trigger:focus,
+.student-discount-app__trigger:focus-visible,
+.student-discount-app__trigger:active {
+  background: transparent !important;
+  color: inherit !important;
+}
+
 .student-discount-app__trigger--text {
   padding: 14px 24px;
   background: var(--sd-background);
@@ -35,6 +43,22 @@
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
+}
+
+.student-discount-app__trigger--text:hover,
+.student-discount-app__trigger--text:focus,
+.student-discount-app__trigger--text:focus-visible,
+.student-discount-app__trigger--text:active {
+  background: var(--sd-background) !important;
+  color: var(--sd-text) !important;
+}
+
+.student-discount-app__trigger::before,
+.student-discount-app__trigger::after,
+.student-discount-dialog button::before,
+.student-discount-dialog button::after {
+  display: none !important;
+  content: none !important;
 }
 
 .student-discount-app__image {
@@ -117,6 +141,14 @@
   cursor: pointer;
 }
 
+.student-discount-dialog__close:hover,
+.student-discount-dialog__close:focus,
+.student-discount-dialog__close:focus-visible,
+.student-discount-dialog__close:active {
+  background: transparent !important;
+  color: #111 !important;
+}
+
 .student-discount-dialog__brand {
   display: flex;
   justify-content: center;
@@ -142,6 +174,14 @@
   font-size: 15px;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.student-discount-dialog__back:hover,
+.student-discount-dialog__back:focus,
+.student-discount-dialog__back:focus-visible,
+.student-discount-dialog__back:active {
+  background: transparent !important;
+  color: #111 !important;
 }
 
 .student-discount-dialog__back span[aria-hidden="true"] {
@@ -216,6 +256,18 @@
   font: inherit;
   font-size: 15px;
   cursor: pointer;
+}
+
+.student-discount-dialog button[type="submit"]:hover,
+.student-discount-dialog button[type="submit"]:focus,
+.student-discount-dialog button[type="submit"]:focus-visible,
+.student-discount-dialog button[type="submit"]:active,
+.student-discount-dialog__primary:hover,
+.student-discount-dialog__primary:focus,
+.student-discount-dialog__primary:focus-visible,
+.student-discount-dialog__primary:active {
+  background: #222 !important;
+  color: #fff !important;
 }
 
 .student-discount-dialog button[disabled] {
@@ -374,8 +426,11 @@
 }
 
 .student-discount-dialog__clear-file:hover,
-.student-discount-dialog__clear-file:focus-visible {
-  background: #111;
+.student-discount-dialog__clear-file:focus,
+.student-discount-dialog__clear-file:focus-visible,
+.student-discount-dialog__clear-file:active {
+  background: rgba(0, 0, 0, .76) !important;
+  color: #fff !important;
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
@@ -500,9 +555,11 @@
 }
 
 .student-discount-dialog__copy:hover,
-.student-discount-dialog__copy:focus-visible {
-  background: #222;
-  color: #fff;
+.student-discount-dialog__copy:focus,
+.student-discount-dialog__copy:focus-visible,
+.student-discount-dialog__copy:active {
+  background: #fff !important;
+  color: #111 !important;
 }
 
 .student-discount-dialog__copy-feedback {
