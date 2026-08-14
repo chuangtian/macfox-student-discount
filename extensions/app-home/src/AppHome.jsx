@@ -31,6 +31,8 @@ function App() {
   const [campaign, setCampaign] = useState(DEFAULT_DISCOUNT_SETTINGS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [clearingTestData, setClearingTestData] = useState(false);
+  const [testCleanupAvailable, setTestCleanupAvailable] = useState(false);
   const [error, setError] = useState('');
   const [reviewingId, setReviewingId] = useState('');
   const [selectedClaim, setSelectedClaim] = useState(null);
@@ -93,12 +95,47 @@ function App() {
       if (!response.ok) throw new Error(json.error || '申请记录加载失败');
       setClaims(json.claims || []);
       setCampaign({...DEFAULT_DISCOUNT_SETTINGS, ...(json.campaign || {})});
+      setTestCleanupAvailable(Boolean(json.testCleanupAvailable));
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : '申请记录加载失败');
     } finally {
       setLoading(false);
     }
   }, [apiFetch]);
+
+  const clearAllTestData = useCallback(async () => {
+    setClearingTestData(true);
+    try {
+      const response = await apiFetch('', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({confirmation: 'CLEAR_ALL_TEST_DATA'}),
+      });
+      const json = await response.json();
+      if (!response.ok && response.status !== 207) {
+        throw new Error(json.error || '测试数据清理失败');
+      }
+      await shopify.modal.hide('clear-test-data-modal');
+      await load();
+      if (json.failedClaims) {
+        shopify.toast.show(
+          `已清理 ${json.deletedClaims} 条记录，另有 ${json.failedClaims} 条未能清理，请重试`,
+          {isError: true},
+        );
+      } else {
+        shopify.toast.show(
+          `已清理 ${json.deletedClaims} 条申请、${json.deletedDiscounts} 个折扣码和 ${json.deletedEvidenceFiles} 个学生证文件`,
+        );
+      }
+    } catch (cleanupError) {
+      shopify.toast.show(
+        cleanupError instanceof Error ? cleanupError.message : '测试数据清理失败',
+        {isError: true},
+      );
+    } finally {
+      setClearingTestData(false);
+    }
+  }, [apiFetch, load]);
 
   useEffect(() => {
     void load();
@@ -363,6 +400,24 @@ function App() {
             <s-stack direction="block" gap="base">
               <s-text>最近 100 条记录；学生证文件审核完成后仍保留。</s-text>
 
+              {testCleanupAvailable && (
+                <s-banner tone="warning" heading="临时测试工具">
+                  <s-stack direction="block" gap="base">
+                    <s-text>清空当前测试店铺的申请记录、学生证文件，以及这些申请生成的 Shopify 折扣码。折扣规则设置会保留。</s-text>
+                    <s-stack direction="inline">
+                      <s-button
+                        tone="critical"
+                        disabled={loading || claims.length === 0}
+                        commandFor="clear-test-data-modal"
+                        command="--show"
+                      >
+                        一键清空全部数据
+                      </s-button>
+                    </s-stack>
+                  </s-stack>
+                </s-banner>
+              )}
+
               {error && <s-banner tone="critical">{error}</s-banner>}
               {loading && <s-stack direction="inline" gap="small"><s-spinner /><s-text>正在加载申请记录…</s-text></s-stack>}
 
@@ -463,6 +518,16 @@ function App() {
           <s-box padding="base"><s-text>未找到学生证照片</s-text></s-box>
         )}
         <s-button slot="secondary-actions" commandFor="student-id-modal" command="--hide">关闭</s-button>
+      </s-modal>
+
+      <s-modal id="clear-test-data-modal" heading="确认清空全部测试数据">
+        <s-stack direction="block" gap="base">
+          <s-banner tone="critical">此操作无法撤销。</s-banner>
+          <s-text>将永久删除当前测试店铺的全部 {claims.length} 条申请记录、学生证文件，以及申请生成的 Shopify 折扣码。</s-text>
+          <s-text color="subdued">折扣码前缀、折扣类型、适用范围、使用次数和叠加规则会保留。</s-text>
+        </s-stack>
+        <s-button slot="secondary-actions" disabled={clearingTestData} commandFor="clear-test-data-modal" command="--hide">取消</s-button>
+        <s-button slot="primary-action" variant="primary" tone="critical" loading={clearingTestData} onClick={() => void clearAllTestData()}>确认永久清空</s-button>
       </s-modal>
     </>
   );
