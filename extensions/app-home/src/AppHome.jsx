@@ -254,7 +254,7 @@ function App() {
       </s-app-nav>
 
       <s-box padding="base" maxInlineSize="180px">
-        <s-image src="./macfox-logo-black.svg" alt="Macfox" />
+        <s-image src="./macfox-logo-black.png" alt="Macfox" />
       </s-box>
 
       {view === 'discount-settings' && (
