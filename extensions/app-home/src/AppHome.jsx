@@ -115,7 +115,7 @@ function App() {
       if (!response.ok && response.status !== 207) {
         throw new Error(json.error || '测试数据清理失败');
       }
-      await shopify.modal.hide('clear-test-data-modal');
+      document.getElementById('clear-test-data-modal')?.hideOverlay?.();
       await load();
       if (json.failedClaims) {
         shopify.toast.show(
