@@ -11,6 +11,7 @@
     "dev": "shopify app dev",
     "dev:test-store": "sh scripts/dev-test-store.sh",
     "dev:test-store:clean": "shopify app dev clean --config shopify.app.toml --store macfox-test-app.myshopify.com",
+    "dev:local-preview": "node scripts/local-preview-server.mjs",
     "check": "shopify app config validate --config shopify.app.toml --json && shopify app build",
     "info": "shopify app info",
     "generate": "shopify app generate",
