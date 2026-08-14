@@ -530,12 +530,12 @@
   }
 
   .student-discount-dialog__panel {
-    top: 8px;
-    left: 8px;
+    top: 50%;
+    left: 50%;
     width: calc(100vw - 16px);
     max-height: calc(100dvh - 16px);
     padding: 18px 15px max(20px, env(safe-area-inset-bottom));
-    transform: none;
+    transform: translate(-50%, -50%);
   }
 
   .student-discount-dialog__close {

@@ -253,10 +253,6 @@ function App() {
         <s-link href="/theme-module">店铺模块</s-link>
       </s-app-nav>
 
-      <s-box padding="base" maxInlineSize="180px">
-        <s-image src="./macfox-logo-black.png" alt="Macfox" />
-      </s-box>
-
       {view === 'discount-settings' && (
         <s-page heading="折扣设置">
           <s-button
